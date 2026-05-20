@@ -1,17 +1,19 @@
-# Markdown Support for Visual Studio Code <!-- omit in toc -->
+# Markdown Aura <!-- omit in toc -->
 
-[![version](https://img.shields.io/vscode-marketplace/v/yzhang.markdown-all-in-one.svg?style=flat-square&label=vscode%20marketplace)](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
-[![installs](https://img.shields.io/vscode-marketplace/d/yzhang.markdown-all-in-one.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/yzhang-gh/vscode-markdown/main.yml?style=flat-square&branch=master)](https://github.com/yzhang-gh/vscode-markdown/actions)
-[![GitHub stars](https://img.shields.io/github/stars/yzhang-gh/vscode-markdown.svg?style=flat-square&label=github%20stars)](https://github.com/yzhang-gh/vscode-markdown)
-[![GitHub Contributors](https://img.shields.io/github/contributors/yzhang-gh/vscode-markdown.svg?style=flat-square)](https://github.com/yzhang-gh/vscode-markdown/graphs/contributors)
+> **Fork of [Markdown All in One](https://github.com/yzhang-gh/vscode-markdown) by [@yzhang-gh](https://github.com/yzhang-gh)**
+> — all original features preserved, plus semantic task state decorations.
 
-All you need for Markdown (keyboard shortcuts, table of contents, auto preview and more).
+[![GitHub stars](https://img.shields.io/github/stars/pasta0126/markdown-aura.svg?style=flat-square&label=github%20stars)](https://github.com/pasta0126/markdown-aura)
 
-***Note***: VS Code has basic Markdown support out-of-the-box (e.g, **Markdown preview**), please see the [official documentation](https://code.visualstudio.com/docs/languages/markdown) for more information.
+Everything you need to write Markdown (keyboard shortcuts, table of contents, auto preview and more), now with visual semantic layers for task lists inspired by Bullet Journal and Kanban workflows.
+
+***Note***: VS Code has basic Markdown support out-of-the-box (e.g. **Markdown preview**), please see the [official documentation](https://code.visualstudio.com/docs/languages/markdown) for more information.
 
 **Table of Contents**
 
+- [What's new in Markdown Aura](#whats-new-in-markdown-aura)
+  - [Semantic task decorations](#semantic-task-decorations)
+  - [Extended list editing](#extended-list-editing)
 - [Features](#features)
   - [Keyboard shortcuts](#keyboard-shortcuts)
   - [Table of contents](#table-of-contents)
@@ -27,12 +29,53 @@ All you need for Markdown (keyboard shortcuts, table of contents, auto preview a
 - [FAQ](#faq)
     - [Q: Error "command 'markdown.extension.onXXXKey' not found"](#q-error-command-markdownextensiononxxxkey-not-found)
     - [Q: Which Markdown syntax is supported?](#q-which-markdown-syntax-is-supported)
-    - [Q: This extension has overridden some of my key bindings (e.g. <kbd>Ctrl</kbd> + <kbd>B</kbd>, <kbd>Alt</kbd> + <kbd>C</kbd>)](#q-this-extension-has-overridden-some-of-my-key-bindings-eg-ctrl--b-alt--c)
+    - [Q: This extension has overridden some of my key bindings (e.g. Ctrl + B, Alt + C)](#q-this-extension-has-overridden-some-of-my-key-bindings-eg-ctrl--b-alt--c)
     - [Q: The extension is unresponsive, causing lag etc. (performance issues)](#q-the-extension-is-unresponsive-causing-lag-etc-performance-issues)
 - [Changelog](#changelog)
-- [Latest Development Build](#latest-development-build)
 - [Contributing](#contributing)
-- [Related](#related)
+- [Upstream project](#upstream-project)
+
+---
+
+## What's new in Markdown Aura
+
+### Semantic task decorations
+
+Markdown Aura extends the standard GFM task list (`[ ]` / `[x]`) with **9 semantic states**, each rendered with a distinct visual style directly in the editor — no file modification, purely visual overlays.
+
+| Marker | State | Visual |
+|--------|-------|--------|
+| `- [ ]` | Todo | Soft blue-grey, slightly muted |
+| `- [x]` | Done | Green, strikethrough, reduced opacity |
+| `- [~]` | In progress | Light blue, italic |
+| `- [-]` | Cancelled | Grey, strikethrough, italic, low opacity |
+| `- [!]` | Important | Yellow, bold, left border accent |
+| `- [?]` | Blocked | Orange-warm tint |
+| `- [*]` | Priority | Red, bold, overview ruler marker |
+| `- [>]` | Migrated | Muted blue, italic |
+| `- [<]` | Backlog | Grey, italic, low opacity |
+
+Decorations apply to both **unordered** (`-`, `+`, `*`) and **ordered** (`1.`, `2)`, …) list items.
+
+> **Note:** These markers are non-standard Markdown. They will render as plain text in most Markdown previewers. They are designed for personal task management inside the editor.
+
+Toggle all semantic decorations at once via:
+
+```json
+"markdown.extension.theming.decoration.renderSemanticTasks": true
+```
+
+### Extended list editing
+
+The smart list editing engine (Enter / Tab / Backspace / auto-renumber) now fully understands all 9 semantic states:
+
+- **Enter** on `- [~] item` → continues with `- [~] ` (preserves state)
+- **Enter** on empty `- [!] ` → removes/outdents the item (same as `[ ]`/`[x]`)
+- **Backspace** on `- [*] ` → removes the checkbox token
+- **Tab / Shift+Tab** → indentation works correctly with any state
+- **Auto-renumber** → ordered list renumbering ignores marker content as expected
+
+---
 
 ## Features
 
@@ -131,7 +174,7 @@ See full key binding list in the [keyboard shortcuts](#keyboard-shortcuts-1) sec
 
   ***Note***: The key binding is <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd> on Linux. See [Visual Studio Code Key Bindings](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-reference).
 
-- Task lists
+- Task lists (standard `[ ]` / `[x]` plus the 9 semantic states described above)
 
 ### Math
 
@@ -203,35 +246,36 @@ Tip: also support the option `completion.root`
 <details>
 <summary>Table</summary>
 
-| Name                                                       | Default    | Description                                                                                      |
-| ---------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------ |
-| `markdown.extension.completion.respectVscodeSearchExclude` | `true`     | Whether to consider `search.exclude` option when providing file path completions                 |
-| `markdown.extension.completion.root`                       |            | Root folder when providing file path completions (It takes effect when the path starts with `/`) |
-| `markdown.extension.italic.indicator`                      | `*`        | Use `*` or `_` to wrap italic text                                                               |
-| `markdown.extension.bold.indicator`                        | `**`       | Use `**` or `__` to wrap bold text                                                               |
-| `markdown.extension.katex.macros`                          | `{}`       | KaTeX macros e.g. `{ "\\name": "expansion", ... }`                                               |
-| `markdown.extension.list.indentationSize`                  | `adaptive` | Use different indentation size for ordered and unordered list                                    |
-| `markdown.extension.list.toggle.candidate-markers`         | `[ "-", "*", "+", "1.", "1)" ]`  | Use a array for toggle ordered list marker e.g. `["*", "1."]`              |
-| `markdown.extension.orderedList.autoRenumber`              | `true`     | Auto fix list markers as you edits                                                               |
-| `markdown.extension.orderedList.marker`                    | `ordered`  | Or `one`: always use `1.` as ordered list marker                                                 |
-| `markdown.extension.preview.autoShowPreviewToSide`         | `false`    | Automatically show preview when opening a Markdown file.                                         |
-| `markdown.extension.print.absoluteImgPath`                 | `true`     | Convert image path to absolute path                                                              |
-| `markdown.extension.print.imgToBase64`                     | `false`    | Convert images to base64 when printing to HTML                                                   |
-| `markdown.extension.print.includeVscodeStylesheets`        | `true`     | Whether to include VS Code's default styles                                                      |
-| `markdown.extension.print.onFileSave`                      | `false`    | Print to HTML on file save                                                                       |
-| `markdown.extension.print.theme`                           | `light`    | Theme of the exported HTML                                                                       |
-| `markdown.extension.print.validateUrls`                    | `true`     | Enable/disable URL validation when printing                                                      |
-| `markdown.extension.syntax.decorations`                    | `true`     | Add decorations to ~~strikethrough~~ and `code span`                                             |
-| `markdown.extension.syntax.decorationFileSizeLimit`        | 50000      | Don't render syntax decorations if a file is larger than this size (in byte/B)                   |
-| `markdown.extension.syntax.plainTheme`                     | `false`    | A distraction-free theme                                                                         |
-| `markdown.extension.tableFormatter.enabled`                | `true`     | Enable GFM table formatter                                                                       |
-| `markdown.extension.toc.slugifyMode`                       | `github`   | Slugify mode for TOC link generation (`vscode`, `github`, `gitlab` or `gitea`)                   |
-| `markdown.extension.toc.omittedFromToc`                    | `{}`       | Lists of headings to omit by project file (e.g. `{ "README.md": ["# Introduction"] }`)           |
-| `markdown.extension.toc.levels`                            | `1..6`     | Control the heading levels to show in the table of contents.                                     |
-| `markdown.extension.toc.orderedList`                       | `false`    | Use ordered list in the table of contents.                                                       |
-| `markdown.extension.toc.plaintext`                         | `false`    | Just plain text.                                                                                 |
-| `markdown.extension.toc.unorderedList.marker`              | `-`        | Use `-`, `*` or `+` in the table of contents (for unordered list)                                |
-| `markdown.extension.toc.updateOnSave`                      | `true`     | Automatically update the table of contents on save.                                              |
+| Name                                                                   | Default    | Description                                                                                      |
+| ---------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------ |
+| `markdown.extension.completion.respectVscodeSearchExclude`             | `true`     | Whether to consider `search.exclude` option when providing file path completions                 |
+| `markdown.extension.completion.root`                                   |            | Root folder when providing file path completions (It takes effect when the path starts with `/`) |
+| `markdown.extension.italic.indicator`                                  | `*`        | Use `*` or `_` to wrap italic text                                                               |
+| `markdown.extension.bold.indicator`                                    | `**`       | Use `**` or `__` to wrap bold text                                                               |
+| `markdown.extension.katex.macros`                                      | `{}`       | KaTeX macros e.g. `{ "\\name": "expansion", ... }`                                               |
+| `markdown.extension.list.indentationSize`                              | `adaptive` | Use different indentation size for ordered and unordered list                                    |
+| `markdown.extension.list.toggle.candidate-markers`                     | `[ "-", "*", "+", "1.", "1)" ]`  | Markers to cycle through with Toggle List                             |
+| `markdown.extension.orderedList.autoRenumber`                          | `true`     | Auto fix list markers as you edits                                                               |
+| `markdown.extension.orderedList.marker`                                | `ordered`  | Or `one`: always use `1.` as ordered list marker                                                 |
+| `markdown.extension.preview.autoShowPreviewToSide`                     | `false`    | Automatically show preview when opening a Markdown file                                          |
+| `markdown.extension.print.absoluteImgPath`                             | `true`     | Convert image path to absolute path                                                              |
+| `markdown.extension.print.imgToBase64`                                 | `false`    | Convert images to base64 when printing to HTML                                                   |
+| `markdown.extension.print.includeVscodeStylesheets`                    | `true`     | Whether to include VS Code's default styles                                                      |
+| `markdown.extension.print.onFileSave`                                  | `false`    | Print to HTML on file save                                                                       |
+| `markdown.extension.print.theme`                                       | `light`    | Theme of the exported HTML                                                                       |
+| `markdown.extension.print.validateUrls`                                | `true`     | Enable/disable URL validation when printing                                                      |
+| `markdown.extension.syntax.decorations`                                | `true`     | Add decorations to ~~strikethrough~~ and `code span`                                             |
+| `markdown.extension.syntax.decorationFileSizeLimit`                    | 50000      | Don't render syntax decorations if a file is larger than this size (in byte/B)                   |
+| `markdown.extension.syntax.plainTheme`                                 | `false`    | A distraction-free theme                                                                         |
+| `markdown.extension.tableFormatter.enabled`                            | `true`     | Enable GFM table formatter                                                                       |
+| `markdown.extension.theming.decoration.renderSemanticTasks`            | `true`     | **(Aura)** Render semantic decorations for task items (`[ ]`, `[x]`, `[~]`, `[-]`, `[!]`, `[?]`, `[*]`, `[>]`, `[<]`) |
+| `markdown.extension.toc.slugifyMode`                                   | `github`   | Slugify mode for TOC link generation (`vscode`, `github`, `gitlab` or `gitea`)                   |
+| `markdown.extension.toc.omittedFromToc`                                | `{}`       | Lists of headings to omit by project file (e.g. `{ "README.md": ["# Introduction"] }`)           |
+| `markdown.extension.toc.levels`                                        | `1..6`     | Control the heading levels to show in the table of contents                                      |
+| `markdown.extension.toc.orderedList`                                   | `false`    | Use ordered list in the table of contents                                                        |
+| `markdown.extension.toc.plaintext`                                     | `false`    | Just plain text                                                                                  |
+| `markdown.extension.toc.unorderedList.marker`                          | `-`        | Use `-`, `*` or `+` in the table of contents (for unordered list)                                |
+| `markdown.extension.toc.updateOnSave`                                  | `true`     | Automatically update the table of contents on save                                               |
 
 </details>
 
@@ -247,9 +291,9 @@ Tip: also support the option `completion.root`
   2. **Close and restart VS Code. (important!)**
   3. Reinstall this extension.
 
-- If it doesn't help, feel free to open a new issue on [GitHub](https://github.com/yzhang-gh/vscode-markdown/issues/new/choose). It would be better if you can report any suspicious error information to us: It's usually in VS Code's menubar **Help** > **Toggle Developer Tools** > **Console**.
+- If it doesn't help, feel free to open a new issue on [GitHub](https://github.com/pasta0126/markdown-aura/issues/new).
 
-- (As a last resort, you may choose to delete `onXXXKey` keys through [VS Code's Keyboard Shortcuts editor](https://code.visualstudio.com/docs/getstarted/keybindings) if you do not need the [list editing feature](https://github.com/yzhang-gh/vscode-markdown#list-editing) at all.)
+- (As a last resort, you may choose to delete `onXXXKey` keys through [VS Code's Keyboard Shortcuts editor](https://code.visualstudio.com/docs/getstarted/keybindings) if you do not need the [list editing feature](#list-editing) at all.)
 
 #### Q: Which Markdown syntax is supported?
 
@@ -270,32 +314,18 @@ From experience, there is *a good chance* that the performance issues are caused
 
 This can be verified if you try again with all other extensions disabled (execute `Developer: Reload with Extensions Disabled` or `Extensions: Disable All Installed Extensions for this Workspace` in the VS Code command Palette) and then enable this extension.
 
-To find out the root cause, you can install our [development build](#latest-development-build) (`debug.vsix`) and create a CPU profile following this official [instruction](https://github.com/microsoft/vscode/wiki/Performance-Issues#profile-the-running-extensions) from the VS Code. And then please open a GitHub issue with that profile (`.cpuprofile.txt`) attached.
-
 ## Changelog
 
 See [CHANGELOG](CHANGELOG.md) for more information.
 
-## Latest Development Build
-
-Download it [here](https://github.com/yzhang-gh/vscode-markdown/actions/workflows/main.yml?query=event%3Apush+is%3Asuccess), please click the latest passing event to download artifacts.
-
-There are two versions: `markdown-all-in-one-*.vsix` is the regular build, while `debug.vsix` is used to create a verbose CPU profile.
-
-To install, execute `Extensions: Install from VSIX...` in the VS Code Command Palette (`ctrl + shift + p`)
-
 ## Contributing
 
-- File bugs, feature requests in [GitHub Issues](https://github.com/yzhang-gh/vscode-markdown/issues).
-- Leave a review on [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one#review-details).
-- Buy me a coffee ☕ (via [PayPal](https://www.paypal.me/2yzhang), [Alipay or WeChat](donate.md)).
+- File bugs or feature requests in [GitHub Issues](https://github.com/pasta0126/markdown-aura/issues).
+- Changes specific to Markdown Aura (semantic decorations, list editing extensions) live in:
+  - `src/theming/constant.ts` — decoration styles
+  - `src/theming/decorationWorkerRegistry.ts` — pattern matching workers
+  - `src/listEditing.ts` — list editing regex (search for `[ x~\-!?*><]`)
 
-Special thanks to the collaborator [@Lemmingh](https://github.com/Lemmingh) and all other [contributors](https://github.com/yzhang-gh/vscode-markdown/graphs/contributors).
+## Upstream project
 
-[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/0)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/0)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/1)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/1)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/2)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/2)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/3)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/3)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/4)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/4)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/5)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/5)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/6)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/6)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/7)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/7)
-
----
-
-## Related
-
-[More extensions of mine](https://marketplace.visualstudio.com/publishers/yzhang)
+This extension is a fork of **[Markdown All in One](https://github.com/yzhang-gh/vscode-markdown)** by [@yzhang-gh](https://github.com/yzhang-gh) and contributors, published under the MIT license. All original features, keyboard shortcuts, and settings are preserved. Upstream changes are periodically merged via `git rebase upstream/master`.

@@ -1,10 +1,10 @@
 {
-    "name": "markdown-all-in-one",
+    "name": "markdown-aura",
     "displayName": "%ext.displayName%",
     "description": "%ext.description%",
     "icon": "images/Markdown-mark.png",
-    "version": "3.6.3",
-    "publisher": "yzhang",
+    "version": "1.0.0",
+    "publisher": "pasta0126",
     "engines": {
         "vscode": "^1.77.0"
     },
@@ -558,6 +558,12 @@
                     "type": "boolean",
                     "default": false,
                     "markdownDescription": "%config.theming.decoration.renderTrailingSpace.description%",
+                    "scope": "application"
+                },
+                "markdown.extension.theming.decoration.renderSemanticTasks": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Render semantic decorations for task list items (`[ ]`, `[x]`, `[~]`, `[-]`, `[!]`, `[?]`, `[*]`, `[>]`, `[<]`).",
                     "scope": "application"
                 },
                 "markdown.extension.toc.levels": {

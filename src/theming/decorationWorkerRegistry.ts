@@ -3,7 +3,7 @@
 import * as vscode from "vscode";
 import { commonMarkEngine, mdEngine } from "../markdownEngine";
 import { DecorationClass } from "./constant";
-import { IDecorationRecord, IWorkerRegistry } from "./decorationManager";
+import { IDecorationRecord, IFuncAnalysisWorker, IWorkerRegistry } from "./decorationManager";
 
 // ## Organization
 //
@@ -31,6 +31,25 @@ import { IDecorationRecord, IWorkerRegistry } from "./decorationManager";
 //     });
 // },
 // ````
+
+function makeTaskWorker(target: DecorationClass, regex: RegExp): IFuncAnalysisWorker {
+    return (document, token) => {
+        return new Promise<IDecorationRecord>((resolve, reject): void => {
+            token.onCancellationRequested(reject);
+            if (token.isCancellationRequested) {
+                reject();
+                return;
+            }
+            const ranges: vscode.Range[] = [];
+            for (let i = 0; i < document.lineCount; i++) {
+                if (regex.test(document.lineAt(i).text)) {
+                    ranges.push(document.lineAt(i).range);
+                }
+            }
+            resolve({ target, ranges });
+        });
+    };
+}
 
 /**
  * The registry of decoration analysis workers.
@@ -223,6 +242,16 @@ const decorationWorkerRegistry: IWorkerRegistry = {
 
         return { target: DecorationClass.Strikethrough, ranges };
     },
+
+    [DecorationClass.TaskTodo]:      makeTaskWorker(DecorationClass.TaskTodo,      /^\s*([-+*]|[0-9]+[.)]) +\[ \]/),
+    [DecorationClass.TaskDone]:      makeTaskWorker(DecorationClass.TaskDone,      /^\s*([-+*]|[0-9]+[.)]) +\[x\]/i),
+    [DecorationClass.TaskProgress]:  makeTaskWorker(DecorationClass.TaskProgress,  /^\s*([-+*]|[0-9]+[.)]) +\[~\]/),
+    [DecorationClass.TaskCancelled]: makeTaskWorker(DecorationClass.TaskCancelled, /^\s*([-+*]|[0-9]+[.)]) +\[-\]/),
+    [DecorationClass.TaskImportant]: makeTaskWorker(DecorationClass.TaskImportant, /^\s*([-+*]|[0-9]+[.)]) +\[!\]/),
+    [DecorationClass.TaskBlocked]:   makeTaskWorker(DecorationClass.TaskBlocked,   /^\s*([-+*]|[0-9]+[.)]) +\[\?\]/),
+    [DecorationClass.TaskPriority]:  makeTaskWorker(DecorationClass.TaskPriority,  /^\s*([-+*]|[0-9]+[.)]) +\[\*\]/),
+    [DecorationClass.TaskMigrated]:  makeTaskWorker(DecorationClass.TaskMigrated,  /^\s*([-+*]|[0-9]+[.)]) +\[>\]/),
+    [DecorationClass.TaskBacklog]:   makeTaskWorker(DecorationClass.TaskBacklog,   /^\s*([-+*]|[0-9]+[.)]) +\[<\]/),
 
     [DecorationClass.TrailingSpace]: (document, token) => {
         return new Promise<IDecorationRecord>((resolve, reject): void => {

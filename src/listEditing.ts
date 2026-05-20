@@ -53,16 +53,16 @@ function onEnterKey(modifiers?: IModifier) {
 
     //// If it's an empty list item, remove it
     if (
-        /^([-+*]|[0-9]+[.)])( +\[[ x]\])?$/.test(textBeforeCursor.trim())  // It is a (task) list item
+        /^([-+*]|[0-9]+[.)])( +\[[ x~\-!?*><]\])?$/.test(textBeforeCursor.trim())  // It is a (task) list item
         && textAfterCursor.trim().length == 0                              // It is empty
     ) {
-        if (/^\s+([-+*]|[0-9]+[.)]) +(\[[ x]\] )?$/.test(textBeforeCursor)) {
+        if (/^\s+([-+*]|[0-9]+[.)]) +(\[[ x~\-!?*><]\] )?$/.test(textBeforeCursor)) {
             // It is not a top-level list item, outdent it
             return outdent(editor).then(() => fixMarker(editor));
         } else if (/^([-+*]|[0-9]+[.)]) $/.test(textBeforeCursor)) {
             // It is a general list item, delete the list marker
             return deleteRange(editor, new Range(cursorPos.with({ character: 0 }), cursorPos)).then(() => fixMarker(editor));
-        } else if (/^([-+*]|[0-9]+[.)]) +(\[[ x]\] )$/.test(textBeforeCursor)) {
+        } else if (/^([-+*]|[0-9]+[.)]) +(\[[ x~\-!?*><]\] )$/.test(textBeforeCursor)) {
             // It is a task list item, delete the checkbox
             return deleteRange(editor, new Range(cursorPos.with({ character: textBeforeCursor.length - 4 }), cursorPos)).then(() => fixMarker(editor));
         } else {
@@ -108,7 +108,7 @@ function onEnterKey(modifiers?: IModifier) {
                 editor.selection = new Selection(newCursorPos, newCursorPos);
             }
         }).then(() => { editor.revealRange(editor.selection) });
-    } else if ((matches = /^((\s*[-+*] +)(\[[ x]\] +)?)/.exec(textBeforeCursor)) !== null) {
+    } else if ((matches = /^((\s*[-+*] +)(\[[ x~\-!?*><]\] +)?)/.exec(textBeforeCursor)) !== null) {
         // satisfy compiler's null check
         const match0 = matches[0];
         const match1 = matches[1];
@@ -144,7 +144,7 @@ function onEnterKey(modifiers?: IModifier) {
                 editor.selection = new Selection(newCursorPos, newCursorPos);
             }
         }).then(() => { editor.revealRange(editor.selection) });
-    } else if ((matches = /^(\s*)([0-9]+)([.)])( +)((\[[ x]\] +)?)/.exec(textBeforeCursor)) !== null) {
+    } else if ((matches = /^(\s*)([0-9]+)([.)])( +)((\[[ x~\-!?*><]\] +)?)/.exec(textBeforeCursor)) !== null) {
         // Ordered list
         let config = workspace.getConfiguration('markdown.extension.orderedList').get<string>('marker');
         let marker = '1';
@@ -183,7 +183,7 @@ function onTabKey(modifiers?: IModifier) {
     let cursorPos = editor.selection.start;
     let lineText = editor.document.lineAt(cursorPos.line).text;
 
-    let match = /^\s*([-+*]|[0-9]+[.)]) +(\[[ x]\] +)?/.exec(lineText);
+    let match = /^\s*([-+*]|[0-9]+[.)]) +(\[[ x~\-!?*><]\] +)?/.exec(lineText);
     if (
         match
         && (
@@ -218,7 +218,7 @@ function onBackspaceKey() {
         return editor.edit(editBuilder => {
             editBuilder.replace(new Range(cursor.with({ character: 0 }), cursor), ' '.repeat(textBeforeCursor.length))
         }).then(() => fixMarker(editor));
-    } else if (/^\s*([-+*]|[0-9]+[.)]) +(\[[ x]\] )$/.test(textBeforeCursor)) {
+    } else if (/^\s*([-+*]|[0-9]+[.)]) +(\[[ x~\-!?*><]\] )$/.test(textBeforeCursor)) {
         // e.g. textBeforeCursor === `- [ ]`, `1. [x]`, `  - [x]`
         return deleteRange(editor, new Range(cursor.with({ character: textBeforeCursor.length - 4 }), cursor)).then(() => fixMarker(editor));
     } else {
@@ -314,7 +314,7 @@ function tryDetermineIndentationSize(editor: TextEditor, line: number, currentIn
     while (--line >= 0) {
         const lineText = editor.document.lineAt(line).text;
         let matches;
-        if ((matches = /^(\s*)(([-+*]|[0-9]+[.)]) +)(\[[ x]\] +)?/.exec(lineText)) !== null) {
+        if ((matches = /^(\s*)(([-+*]|[0-9]+[.)]) +)(\[[ x~\-!?*><]\] +)?/.exec(lineText)) !== null) {
             if (matches[1].length <= currentIndentation) {
                 return matches[2].length;
             }

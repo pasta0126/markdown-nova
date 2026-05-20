@@ -53,6 +53,7 @@ export interface IConfigurationKeyTypeMap {
     /** Formerly "syntax.decorations" */
     "theming.decoration.renderStrikethrough": boolean;
     "theming.decoration.renderTrailingSpace": boolean;
+    "theming.decoration.renderSemanticTasks": boolean;
 
     "toc.levels": string;
     /** To be superseded. */

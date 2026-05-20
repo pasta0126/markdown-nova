@@ -50,6 +50,15 @@ export const enum DecorationClass {
     Paragraph,
     Strikethrough,
     TrailingSpace,
+    TaskTodo,
+    TaskDone,
+    TaskProgress,
+    TaskCancelled,
+    TaskImportant,
+    TaskBlocked,
+    TaskPriority,
+    TaskMigrated,
+    TaskBacklog,
 }
 
 /**
@@ -82,6 +91,68 @@ export const decorationStyles: Readonly<Record<DecorationClass, Readonly<vscode.
     [DecorationClass.TrailingSpace]: {
         backgroundColor: colors[Color.EditorTrailingSpaceBackground],
     },
+    [DecorationClass.TaskTodo]: {
+        isWholeLine: true,
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        color: 'rgba(190, 200, 217, 0.95)',
+        opacity: '0.85',
+    },
+    [DecorationClass.TaskDone]: {
+        isWholeLine: true,
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        color: 'rgba(130, 205, 152, 0.95)',
+        textDecoration: 'line-through',
+        opacity: '0.55',
+    },
+    [DecorationClass.TaskProgress]: {
+        isWholeLine: true,
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        color: 'rgba(193, 220, 255, 1)',
+        fontStyle: 'italic',
+    },
+    [DecorationClass.TaskCancelled]: {
+        isWholeLine: true,
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        color: 'rgba(176, 180, 189, 0.9)',
+        textDecoration: 'line-through',
+        fontStyle: 'italic',
+        opacity: '0.45',
+    },
+    [DecorationClass.TaskImportant]: {
+        isWholeLine: true,
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        color: 'rgba(255, 245, 195, 1)',
+        fontWeight: '700',
+        borderStyle: 'solid',
+        borderWidth: '0 0 0 3px',
+        borderColor: 'rgba(232, 202, 71, 0.95)',
+    },
+    [DecorationClass.TaskBlocked]: {
+        isWholeLine: true,
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        color: 'rgba(255, 225, 199, 1)',
+    },
+    [DecorationClass.TaskPriority]: {
+        isWholeLine: true,
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        color: 'rgba(255, 218, 218, 1)',
+        fontWeight: '700',
+        overviewRulerColor: 'rgba(244, 72, 72, 0.95)',
+        overviewRulerLane: vscode.OverviewRulerLane.Right,
+    },
+    [DecorationClass.TaskMigrated]: {
+        isWholeLine: true,
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        color: 'rgba(149, 179, 222, 0.9)',
+        fontStyle: 'italic',
+    },
+    [DecorationClass.TaskBacklog]: {
+        isWholeLine: true,
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        color: 'rgba(176, 180, 189, 0.9)',
+        fontStyle: 'italic',
+        opacity: '0.45',
+    },
 };
 
 /**
@@ -94,4 +165,13 @@ export const decorationClassConfigMap: Readonly<Record<DecorationClass, IConfigu
     [DecorationClass.Paragraph]: "theming.decoration.renderParagraph",
     [DecorationClass.Strikethrough]: "theming.decoration.renderStrikethrough",
     [DecorationClass.TrailingSpace]: "theming.decoration.renderTrailingSpace",
+    [DecorationClass.TaskTodo]:      "theming.decoration.renderSemanticTasks",
+    [DecorationClass.TaskDone]:      "theming.decoration.renderSemanticTasks",
+    [DecorationClass.TaskProgress]:  "theming.decoration.renderSemanticTasks",
+    [DecorationClass.TaskCancelled]: "theming.decoration.renderSemanticTasks",
+    [DecorationClass.TaskImportant]: "theming.decoration.renderSemanticTasks",
+    [DecorationClass.TaskBlocked]:   "theming.decoration.renderSemanticTasks",
+    [DecorationClass.TaskPriority]:  "theming.decoration.renderSemanticTasks",
+    [DecorationClass.TaskMigrated]:  "theming.decoration.renderSemanticTasks",
+    [DecorationClass.TaskBacklog]:   "theming.decoration.renderSemanticTasks",
 };

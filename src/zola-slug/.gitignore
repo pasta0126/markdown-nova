@@ -4,3 +4,6 @@ Cargo.lock
 **/*.rs.bk
 *.pdb
 pkg/
+!pkg/package.json
+!pkg/zola_slug.js
+!pkg/zola_slug.d.ts

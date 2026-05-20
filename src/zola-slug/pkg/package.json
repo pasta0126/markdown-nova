@@ -1,0 +1,9 @@
+{
+  "name": "zola-slug",
+  "version": "0.0.0",
+  "description": "Stub — build with wasm-pack for full Zola slug support",
+  "main": "zola_slug.js",
+  "module": "zola_slug.js",
+  "types": "zola_slug.d.ts",
+  "sideEffects": false
+}
