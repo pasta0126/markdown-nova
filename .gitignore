@@ -10,3 +10,7 @@ tmp
 # The welcome materials
 /welcome/**
 /changes.md
+
+# Tool directories
+.claude/
+.omc/
