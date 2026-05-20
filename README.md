@@ -1,4 +1,4 @@
-# Markdown Aura
+# Markdown Nova
 
 Fork of [Markdown All in One](https://github.com/yzhang-gh/vscode-markdown) with semantic task state decorations.
 
@@ -85,15 +85,15 @@ All settings use the prefix `markdown.extension.*`. Full list in the [upstream d
 ## Install
 
 ```bash
-code --install-extension markdown-aura-1.0.0.vsix
+code --install-extension markdown-nova-1.0.0.vsix
 ```
 
 Or: Extensions panel → `⋯` → *Install from VSIX…*
 
 ### Before installing
 
-**It is strongly recommended to uninstall `yzhang.markdown-all-in-one` before installing Markdown Aura.**
+**It is strongly recommended to uninstall `yzhang.markdown-all-in-one` before installing Markdown Nova.**
 
 Both extensions register the same commands (`markdown.extension.*`) and key bindings. Running both simultaneously will likely cause conflicts: commands may execute twice, key bindings may behave unpredictably, and list editing could break.
 
-Markdown Aura is a full replacement — all original features are included.
+Markdown Nova is a full replacement — all original features are included.

@@ -1,5 +1,5 @@
 {
-    "ext.displayName": "Markdown Aura",
+    "ext.displayName": "Markdown Nova",
     "ext.description": "Markdown All in One with semantic task decorations ([ ], [x], [~], [-], [!], [?], [*], [>], [<])",
     "command.toc.create.title": "Create Table of Contents",
     "command.toc.update.title": "Update Table of Contents",
